@@ -7,9 +7,13 @@ node {
             sh "chmod +x -R ${env.WORKSPACE}"
             sh './jenkins/scripts/test.sh'
         }
+         stage('Manual Approval') {
+            input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
+        }
         stage('Deploy') {
             sh './jenkins/scripts/deliver.sh'
             input message: 'Sudah selesai menggunakan React App? (Klik "Proceed" untuk mengakhiri)'
+            sh 'sleep 60'
             sh './jenkins/scripts/kill.sh'
         }
     }
